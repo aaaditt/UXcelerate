@@ -20,7 +20,7 @@ export function Panel({
           {title}
         </h2>
         {count !== undefined && (
-          <span className="tnum font-mono text-[11px] text-[#857b6f]">{count}</span>
+          <span className="tnum font-mono text-[11px] text-[#9a8f80]">{count}</span>
         )}
       </header>
       <div className={`min-h-0 flex-1 ${scroll ? 'overflow-y-auto' : ''}`}>{children}</div>
@@ -86,5 +86,5 @@ export function Button({
 }
 
 export function Empty({ children }: { children: ReactNode }) {
-  return <p className="px-3 py-4 text-[12px] leading-relaxed text-[#857b6f]">{children}</p>
+  return <p className="px-3 py-4 text-[12px] leading-relaxed text-[#9a8f80]">{children}</p>
 }

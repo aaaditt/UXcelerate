@@ -44,7 +44,7 @@ function Row({ entry, index }: { entry: TriageEntry; index: number }) {
             {candidate && <Tag tone="warn">Candidate</Tag>}
             {s.status === 'assigned' && <Tag tone="good">Assigned</Tag>}
             {!entry.route.reachable && <Tag tone="bad">No route</Tag>}
-            <span className="tnum font-mono text-[10px] text-[#857b6f]">
+            <span className="tnum font-mono text-[10px] text-[#9a8f80]">
               {s.detectedBy} · {ageLabel(s.detectedAt, state.now)}
             </span>
           </span>
@@ -56,19 +56,19 @@ function Row({ entry, index }: { entry: TriageEntry; index: number }) {
           <p className="text-[12px] leading-relaxed text-[#b7ada0]">{s.note}</p>
 
           <div className="space-y-2">
-            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#857b6f]">
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80]">
               Why this rank
             </p>
             {entry.factors.map((f) => (
               <div key={f.label} className="space-y-1">
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="text-[12px] text-[#e8e1d8]">{f.label}</span>
-                  <span className="tnum font-mono text-[11px] text-[#857b6f]">
+                  <span className="tnum font-mono text-[11px] text-[#9a8f80]">
                     {Math.round(f.value * 100)}%
                   </span>
                 </div>
                 <Meter value={f.value} tone={f.value < 0.4 ? 'bad' : f.value < 0.7 ? 'warn' : 'neutral'} />
-                <p className="text-[11px] leading-snug text-[#857b6f]">{f.detail}</p>
+                <p className="text-[11px] leading-snug text-[#9a8f80]">{f.detail}</p>
               </div>
             ))}
           </div>
@@ -78,14 +78,14 @@ function Row({ entry, index }: { entry: TriageEntry; index: number }) {
               <p className="text-[12px] leading-snug text-[#dc9a3f]">
                 {entry.counterfactual.text}
               </p>
-              <p className="mt-0.5 text-[11px] text-[#857b6f]">
+              <p className="mt-0.5 text-[11px] text-[#9a8f80]">
                 Resolving that contested fact changes who we reach first.
               </p>
             </div>
           )}
 
           <div>
-            <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-[#857b6f]">
+            <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80]">
               Dispatch
             </p>
             <div className="flex flex-wrap gap-1.5">

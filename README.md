@@ -66,9 +66,11 @@ Six named beats, jumpable from the timeline or with keys `1`–`6`:
 
 An unverifiable conformance badge is worse than no badge, so:
 
+**Lighthouse: accessibility 100, best practices 100, SEO 100** on the live build — after fixing the two real failures the first run surfaced. That score is a floor, not a certificate; it cannot see either gap listed below.
+
 **Holds up.** No information is carried by colour alone — confidence is texture, triage order is a numeral, link state is a word. Body text meets WCAG AA contrast on the graphite surfaces, with a 14px floor. Every control is keyboard reachable with a visible focus ring. `prefers-reduced-motion` is respected. The map carries a text alternative summarising its state.
 
-**Does not yet.** The SVG map is not fully keyboard navigable — cells are clickable but not tabbable, so a screen-reader user gets the summary and the panels but not per-cell provenance. Some 10–11px mono labels on the map fall below AA at their size. Both are documented in [`docs/06-accessibility-audit.md`](docs/06-accessibility-audit.md) rather than hidden.
+**Does not yet.** The SVG map is not fully keyboard navigable — cells are clickable but not tabbable, so a screen-reader user gets the summary and the panels but not per-cell provenance. Map callsigns render at 8.5px, breaking the 14px floor the design system sets for itself. Both are documented in [`docs/06-accessibility-audit.md`](docs/06-accessibility-audit.md) rather than hidden.
 
 ## Design system in one paragraph
 

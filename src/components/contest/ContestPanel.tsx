@@ -19,9 +19,9 @@ function ClaimBlock({ claim, label }: { claim: Claim; label: string }) {
     <div className="border border-[#3a342e] p-2.5">
       <div className="flex items-baseline justify-between gap-2">
         <span className="font-mono text-[11px] font-semibold text-[#f2ede6]">{claim.by}</span>
-        <span className="tnum font-mono text-[10px] text-[#857b6f]">T+{claim.at.toFixed(1)}</span>
+        <span className="tnum font-mono text-[10px] text-[#9a8f80]">T+{claim.at.toFixed(1)}</span>
       </div>
-      <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#857b6f]">
+      <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#9a8f80]">
         {claim.sensor}
       </p>
       <p className="mt-1.5 text-[12px] leading-relaxed text-[#b7ada0]">{claim.text}</p>
@@ -58,7 +58,7 @@ function Fact({ fact }: { fact: ContestedFact }) {
     <article className="space-y-2.5 border-b border-[#2c2723] px-3 py-3">
       <div>
         <p className="text-[13px] font-medium text-[#f2ede6]">{fact.subject}</p>
-        <p className="mt-0.5 text-[11px] text-[#857b6f]">
+        <p className="mt-0.5 text-[11px] text-[#9a8f80]">
           Two units, two incompatible readings. Command must decide what to believe.
         </p>
       </div>
@@ -68,7 +68,7 @@ function Fact({ fact }: { fact: ContestedFact }) {
 
       {affected.length > 0 && (
         <div className="border-l-2 border-[#dc9a3f] py-1.5 pl-2.5">
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#857b6f]">
+          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80]">
             Consequence
           </p>
           {affected.map((e) => (
@@ -86,7 +86,7 @@ function Fact({ fact }: { fact: ContestedFact }) {
           Send a unit to verify
         </Button>
       </div>
-      <p className="text-[11px] leading-snug text-[#857b6f]">
+      <p className="text-[11px] leading-snug text-[#9a8f80]">
         Verifying costs time but buys a confirmed fact. Until then this ground stays impassable in
         every route we calculate.
       </p>

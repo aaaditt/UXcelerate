@@ -22,7 +22,7 @@ function Stat({
 }) {
   return (
     <div className={`flex flex-col gap-0.5 border-l border-[#2c2723] px-3 first:border-l-0 ${className}`}>
-      <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-[#857b6f]">{label}</span>
+      <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-[#9a8f80]">{label}</span>
       <span className="tnum text-[13px] font-semibold" style={{ color: tone ?? '#f2ede6' }}>
         {value}
       </span>
@@ -44,7 +44,7 @@ export function CommandBar({ onOpenProcess }: { onOpenProcess: () => void }) {
     <header className="flex shrink-0 flex-wrap items-center gap-y-2 border-b border-[#2c2723] bg-[#151210] px-4 py-2.5">
       <div className="mr-5 flex items-baseline gap-3">
         <span className="text-[15px] font-semibold tracking-[0.2em]">CAIRN</span>
-        <span className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-[#857b6f] sm:inline">
+        <span className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80] sm:inline">
           {INCIDENT.name} · {INCIDENT.sector}
         </span>
       </div>

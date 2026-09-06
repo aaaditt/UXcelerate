@@ -18,7 +18,7 @@ This is also the sharpest departure from convention in this problem space, where
 | `line` | `#3a342e` | borders |
 | `ink` | `#f2ede6` | primary text |
 | `ink-2` | `#b7ada0` | secondary text |
-| `ink-3` | `#857b6f` | labels, metadata |
+| `ink-3` | `#9a8f80` | labels, metadata (5.7:1 on panel) |
 
 Warm rather than cool is a deliberate register shift away from the sci-fi HUD. It should read as an instrument someone is accountable for.
 

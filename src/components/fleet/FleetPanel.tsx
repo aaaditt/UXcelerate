@@ -46,8 +46,8 @@ function Unit({ r }: { r: Robot }) {
           <Tag tone={link.tone}>{link.label}</Tag>
         </span>
         <span className="mt-1 flex items-baseline justify-between gap-2">
-          <span className="text-[11px] text-[#857b6f]">{CLASS_COPY[r.cls]}</span>
-          <span className="tnum font-mono text-[10px] text-[#857b6f]">{r.battery}%</span>
+          <span className="text-[11px] text-[#9a8f80]">{CLASS_COPY[r.cls]}</span>
+          <span className="tnum font-mono text-[10px] text-[#9a8f80]">{r.battery}%</span>
         </span>
         {unheard.length > 0 && (
           <span className="mt-1.5 block text-[11px] leading-snug text-[#dc9a3f]">
@@ -57,7 +57,7 @@ function Unit({ r }: { r: Robot }) {
       </button>
 
       {open && (
-        <div className="space-y-2 px-3 pb-3 text-[11px] leading-relaxed text-[#857b6f]">
+        <div className="space-y-2 px-3 pb-3 text-[11px] leading-relaxed text-[#9a8f80]">
           <p>{r.sensor}</p>
           <p>
             Last contact {ageLabel(r.lastContact, state.now)}

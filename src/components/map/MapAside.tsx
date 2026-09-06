@@ -21,7 +21,7 @@ const SWATCHES = [
 function Legend() {
   return (
     <div className="border-b border-[#2c2723] px-3 py-2.5">
-      <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#857b6f]">
+      <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80]">
         Confidence
       </p>
       <svg width="0" height="0" className="absolute">
@@ -46,12 +46,12 @@ function Legend() {
             </svg>
             <span className="min-w-0">
               <span className="block text-[12px] text-[#e8e1d8]">{s.label}</span>
-              <span className="block text-[11px] leading-snug text-[#857b6f]">{s.hint}</span>
+              <span className="block text-[11px] leading-snug text-[#9a8f80]">{s.hint}</span>
             </span>
           </li>
         ))}
       </ul>
-      <p className="mt-2.5 border-t border-[#2c2723] pt-2 text-[11px] leading-relaxed text-[#857b6f]">
+      <p className="mt-2.5 border-t border-[#2c2723] pt-2 text-[11px] leading-relaxed text-[#9a8f80]">
         Confidence <span className="text-[#dc9a3f]">decays with age</span>. Ground nobody has
         re-checked slides back down this list on its own.
       </p>
@@ -65,10 +65,10 @@ function Inspector() {
   if (!inspect) {
     return (
       <div className="px-3 py-2.5">
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#857b6f]">
+        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80]">
           Provenance
         </p>
-        <p className="mt-1.5 text-[11px] leading-relaxed text-[#857b6f]">
+        <p className="mt-1.5 text-[11px] leading-relaxed text-[#9a8f80]">
           Click any cell to see who reported it and how old that report is.
         </p>
       </div>
@@ -86,31 +86,31 @@ function Inspector() {
   return (
     <div className="px-3 py-2.5">
       <div className="flex items-baseline justify-between">
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#857b6f]">
+        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80]">
           Provenance
         </p>
-        <span className="tnum font-mono text-[10px] text-[#857b6f]">
+        <span className="tnum font-mono text-[10px] text-[#9a8f80]">
           {inspect.x}, {inspect.y}
         </span>
       </div>
 
       <dl className="mt-2 space-y-1.5 text-[12px]">
         <div className="flex justify-between gap-2">
-          <dt className="text-[#857b6f]">Belief</dt>
+          <dt className="text-[#9a8f80]">Belief</dt>
           <dd className="text-[#f2ede6]">{conf}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-[#857b6f]">Passable</dt>
+          <dt className="text-[#9a8f80]">Passable</dt>
           <dd style={{ color: cell.passable ? '#62ab82' : '#e0565c' }}>
             {cell.passable ? 'yes' : 'no'}
           </dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-[#857b6f]">Source</dt>
+          <dt className="text-[#9a8f80]">Source</dt>
           <dd className="font-mono text-[11px] text-[#f2ede6]">{cell.observedBy ?? '—'}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-[#857b6f]">Observed</dt>
+          <dt className="text-[#9a8f80]">Observed</dt>
           <dd className="text-[#f2ede6]">{ageLabel(cell.observedAt, state.now)}</dd>
         </div>
       </dl>
@@ -118,7 +118,7 @@ function Inspector() {
       {cell.observedAt !== null && conf !== 'unknown' && conf !== 'inferred' && (
         <div className="mt-2.5">
           <div className="flex items-baseline justify-between">
-            <span className="text-[11px] text-[#857b6f]">Decays a step in</span>
+            <span className="text-[11px] text-[#9a8f80]">Decays a step in</span>
             <span className="tnum font-mono text-[11px] text-[#dc9a3f]">
               {Math.max(0, Math.round((1 - stale) * (conf === 'confirmed' ? 14 : 9)))} min
             </span>

@@ -50,7 +50,7 @@ export function Timeline() {
           </div>
         </div>
 
-        <span className="tnum w-14 shrink-0 text-right font-mono text-[11px] text-[#857b6f]">
+        <span className="tnum w-14 shrink-0 text-right font-mono text-[11px] text-[#9a8f80]">
           T+{now.toFixed(1)}
         </span>
       </div>
@@ -78,7 +78,7 @@ export function Timeline() {
         })}
       </div>
 
-      <p className="mt-2 max-w-4xl text-[12px] leading-relaxed text-[#857b6f]">{current.blurb}</p>
+      <p className="mt-2 max-w-4xl text-[12px] leading-relaxed text-[#9a8f80]">{current.blurb}</p>
     </div>
   )
 }

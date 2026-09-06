@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react'
 function H({ children, n }: { children: React.ReactNode; n: string }) {
   return (
     <h3 className="mt-10 flex items-baseline gap-3 border-b border-[#2c2723] pb-2 text-[15px] font-semibold text-[#f2ede6] first:mt-0">
-      <span className="tnum font-mono text-[11px] text-[#857b6f]">{n}</span>
+      <span className="tnum font-mono text-[11px] text-[#9a8f80]">{n}</span>
       {children}
     </h3>
   )
@@ -63,7 +63,7 @@ export function CaseStudy({ onClose }: { onClose: () => void }) {
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#857b6f]">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#9a8f80]">
               CAIRN · design case study
             </p>
             <h2 className="mt-2 text-[22px] font-semibold leading-tight text-[#f2ede6]">
@@ -229,7 +229,7 @@ export function CaseStudy({ onClose }: { onClose: () => void }) {
           currently a designer's model of a rescuer's judgement, not a rescuer's.
         </P>
 
-        <p className="mt-10 border-t border-[#2c2723] pt-4 font-mono text-[11px] leading-relaxed text-[#857b6f]">
+        <p className="mt-10 border-t border-[#2c2723] pt-4 font-mono text-[11px] leading-relaxed text-[#9a8f80]">
           Keyboard: <span className="text-[#b7ada0]">space</span> play/pause ·{' '}
           <span className="text-[#b7ada0]">1–6</span> jump to beat ·{' '}
           <span className="text-[#b7ada0]">esc</span> clear selection

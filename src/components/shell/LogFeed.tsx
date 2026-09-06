@@ -25,7 +25,7 @@ export function LogFeed() {
           {state.log.map((l, i) => (
             <li key={i} className="border-b border-[#2c2723] px-3 py-2">
               <div className="flex items-baseline gap-2">
-                <span className="tnum shrink-0 font-mono text-[10px] text-[#857b6f]">
+                <span className="tnum shrink-0 font-mono text-[10px] text-[#9a8f80]">
                   T+{l.known.toFixed(1)}
                 </span>
                 {l.backfilled && (

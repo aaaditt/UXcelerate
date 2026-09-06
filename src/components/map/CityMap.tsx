@@ -74,9 +74,9 @@ function texture(conf: Confidence): string | null {
 
 function RobotGlyph({ r, selected }: { r: Robot; selected: boolean }) {
   const s = 9
-  const stroke = r.link === 'dark' || r.link === 'lost' ? '#857b6f' : '#f2ede6'
+  const stroke = r.link === 'dark' || r.link === 'lost' ? '#9a8f80' : '#f2ede6'
   const fill =
-    r.link === 'dark' || r.link === 'lost' ? 'none' : r.link === 'degraded' ? '#857b6f' : '#f2ede6'
+    r.link === 'dark' || r.link === 'lost' ? 'none' : r.link === 'degraded' ? '#9a8f80' : '#f2ede6'
   const dash = r.link === 'degraded' ? '3 2' : r.link === 'dark' ? '2 2' : undefined
 
   const shape =
@@ -249,11 +249,11 @@ export function CityMap() {
               <g key={r.id} transform={`translate(${r.x * CELL + CELL / 2} ${r.y * CELL + CELL / 2})`}>
                 {rad > 0.05 && (
                   <>
-                    <circle r={rad * CELL} fill="#857b6f" opacity="0.09" />
+                    <circle r={rad * CELL} fill="#9a8f80" opacity="0.09" />
                     <circle
                       r={rad * CELL}
                       fill="none"
-                      stroke="#857b6f"
+                      stroke="#9a8f80"
                       strokeWidth="1.2"
                       strokeDasharray="4 5"
                       opacity="0.75"

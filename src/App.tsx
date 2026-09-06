@@ -49,7 +49,7 @@ function Deck() {
       <Shortcuts />
       <CommandBar onOpenProcess={() => setShowCase(true)} />
 
-      <div className="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-[248px_minmax(0,1fr)_336px]">
+      <main className="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-[248px_minmax(0,1fr)_336px]">
         {/* left rail: who we have, and the key to what the map is saying */}
         <div className="hidden min-h-0 grid-rows-[minmax(0,auto)_minmax(0,1fr)] lg:grid">
           <FleetPanel />
@@ -72,7 +72,7 @@ function Deck() {
           <ContestPanel />
           <LogFeed />
         </div>
-      </div>
+      </main>
 
       {/* narrow viewports get the panels stacked below the map */}
       <div className="grid grid-cols-1 lg:hidden">
