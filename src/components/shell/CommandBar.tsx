@@ -1,6 +1,16 @@
 import { INCIDENT } from '../../sim/seed'
 import { useMission } from '../../state/MissionProvider'
 
+/**
+ * The command bar.
+ *
+ * Most dashboards put reassuring metrics in this position. This one carries
+ * the gaps — how little of the sector is verified, how many units cannot hear
+ * us, how many orders have not landed — and each figure escalates from dormant
+ * grey to amber as it goes wrong. A commander should be able to read how bad
+ * it is from the top strip alone, without parsing a single label.
+ */
+
 function clock(minutes: number, offset: number) {
   const total = minutes + offset
   const h = Math.floor(total / 60)
@@ -9,23 +19,26 @@ function clock(minutes: number, offset: number) {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-function Stat({
-  label,
+function Gap({
   value,
-  tone,
+  label,
+  active,
   className = '',
 }: {
-  label: string
   value: string
-  tone?: string
+  label: string
+  active: boolean
   className?: string
 }) {
   return (
-    <div className={`flex flex-col gap-0.5 border-l border-[#2c2723] px-3 first:border-l-0 ${className}`}>
-      <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-[#9a8f80]">{label}</span>
-      <span className="tnum text-[13px] font-semibold" style={{ color: tone ?? '#f2ede6' }}>
+    <div className={`flex flex-col ${className}`}>
+      <span
+        className="tnum text-[15px] font-semibold leading-none"
+        style={{ color: active ? '#dc9a3f' : '#6f665b' }}
+      >
         {value}
       </span>
+      <span className="mt-1.5 text-[11.5px] leading-none text-[#9a8f80]">{label}</span>
     </div>
   )
 }
@@ -41,43 +54,53 @@ export function CommandBar({ onOpenProcess }: { onOpenProcess: () => void }) {
   )
 
   return (
-    <header className="flex shrink-0 flex-wrap items-center gap-y-2 border-b border-[#2c2723] bg-[#151210] px-4 py-2.5">
-      <div className="mr-5 flex items-baseline gap-3">
-        <span className="text-[15px] font-semibold tracking-[0.2em]">CAIRN</span>
-        <span className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80] sm:inline">
-          {INCIDENT.name} · {INCIDENT.sector}
+    <header className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-3 border-b border-[#2b2620] bg-[#17140f] px-4 py-3">
+      <div className="flex items-baseline gap-3">
+        <span className="text-[16px] font-semibold tracking-[0.22em] text-[#f4efe7]">CAIRN</span>
+        <span className="hidden text-[12px] text-[#9a8f80] sm:inline">
+          {INCIDENT.name}, {INCIDENT.sector}
         </span>
       </div>
 
-      <div className="flex flex-1 flex-wrap items-center">
-        <Stat label="Since quake" value={clock(state.now, INCIDENT.sinceQuake)} />
-        <Stat label="Mission T+" value={`${state.now.toFixed(1)} min`} className="hidden sm:flex" />
-        <Stat
-          label="Sector verified"
-          value={`${cover.pct}%`}
-          tone={cover.pct < 20 ? '#dc9a3f' : undefined}
+      {/* The clock is the one number that is never in doubt. */}
+      <div className="flex items-baseline gap-2">
+        <span className="tnum font-mono text-[19px] font-medium leading-none text-[#f4efe7]">
+          {clock(state.now, INCIDENT.sinceQuake)}
+        </span>
+        <span className="text-[11.5px] text-[#9a8f80]">since the quake</span>
+      </div>
+
+      <div className="flex flex-1 flex-wrap items-end gap-x-5 gap-y-3">
+        <Gap value={`${cover.pct}%`} label="sector verified" active={cover.pct < 15} />
+        <Gap
+          value={`${entries.length}`}
+          label={entries.length === 1 ? 'person found' : 'people found'}
+          active={false}
         />
-        <Stat label="Located" value={`${entries.length}`} className="hidden md:flex" />
-        <Stat
-          label="Units dark"
-          value={`${dark} / ${state.robots.length}`}
-          tone={dark > 0 ? '#dc9a3f' : undefined}
+        <Gap
+          value={`${dark}`}
+          label={dark === 1 ? 'unit out of contact' : 'units out of contact'}
+          active={dark > 0}
           className="hidden md:flex"
         />
-        <Stat
-          label="Orders unheard"
+        <Gap
           value={`${queued}`}
-          tone={queued > 0 ? '#dc9a3f' : undefined}
+          label={queued === 1 ? 'order undelivered' : 'orders undelivered'}
+          active={queued > 0}
           className="hidden lg:flex"
         />
-        <Stat label="Contested" value={`${open}`} tone={open > 0 ? '#e0565c' : undefined} />
+        <Gap
+          value={`${open}`}
+          label={open === 1 ? 'fact disputed' : 'facts disputed'}
+          active={open > 0}
+        />
       </div>
 
       <button
         onClick={onOpenProcess}
-        className="ml-auto border border-[#3a342e] px-2.5 py-1.5 text-[12px] text-[#e8e1d8] transition-colors hover:border-[#6b6055] hover:bg-[#211c18]"
+        className="ml-auto border border-[#3a342c] px-3 py-1.5 text-[12.5px] text-[#e8e1d6] transition-colors hover:border-[#554d43] hover:bg-[#201c17]"
       >
-        Design case study
+        Read the design case
       </button>
     </header>
   )

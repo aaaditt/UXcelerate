@@ -31,6 +31,12 @@ interface MissionCtx {
   /** Cells the operator has asked to see the provenance of. */
   inspect: { x: number; y: number } | null
   setInspect: (c: { x: number; y: number } | null) => void
+  /**
+   * Which question the map is answering: what do we believe is there, or how
+   * old is what we believe. Same data, two readings.
+   */
+  mapView: 'belief' | 'age'
+  setMapView: (v: 'belief' | 'age') => void
 }
 
 const Ctx = createContext<MissionCtx | null>(null)
@@ -46,6 +52,7 @@ export function MissionProvider({ children }: { children: ReactNode }) {
   const [selectedSurvivor, setSelectedSurvivor] = useState<string | null>(null)
   const [selectedRobot, setSelectedRobot] = useState<string | null>(null)
   const [inspect, setInspect] = useState<{ x: number; y: number } | null>(null)
+  const [mapView, setMapView] = useState<'belief' | 'age'>('belief')
 
   const setNow = useCallback((t: number) => {
     setNowRaw(Math.max(0, Math.min(T_MAX, t)))
@@ -113,6 +120,8 @@ export function MissionProvider({ children }: { children: ReactNode }) {
     setSelectedRobot,
     inspect,
     setInspect,
+    mapView,
+    setMapView,
   }
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

@@ -1,60 +1,113 @@
-import { ageLabel, decayed, stalenessRatio } from '../../sim/decay'
+import { ageLabel, certainty, decayed, minutesToDecay } from '../../sim/decay'
 import { useMission } from '../../state/MissionProvider'
+import { Label } from '../shell/ui'
 
 /**
- * Legend + provenance inspector.
+ * The key, and the provenance inspector.
  *
- * The legend is not decoration. If confidence is encoded as material, the key
- * to that material has to be permanently on screen, not hidden behind a help
- * icon — otherwise the encoding is a private joke between the designer and the
- * data. The inspector answers the question every operator asks about any pixel
- * on a disaster map: who says so, and when did they say it?
+ * The key is not decoration. If certainty is encoded as material and units are
+ * encoded as shape, the key to that encoding has to be permanently on screen —
+ * hidden behind a help icon it becomes a private joke between the designer and
+ * the data. The inspector answers the question every operator asks about any
+ * patch of a disaster map: who says so, and when did they say it?
  */
 
-const SWATCHES = [
-  { key: 'confirmed', label: 'Confirmed', hint: 'A unit physically traversed it', pattern: null, alpha: 1 },
-  { key: 'reported', label: 'Reported', hint: 'Sensed at distance, unverified', pattern: 'url(#lStipple)', alpha: 0.74 },
-  { key: 'inferred', label: 'Inferred', hint: 'Pre-quake municipal data', pattern: 'url(#lHatch)', alpha: 0.42 },
-  { key: 'unknown', label: 'Unknown', hint: 'Never observed by anything', pattern: 'url(#lVoid)', alpha: 0.12 },
+const GROUND = [
+  { label: 'Confirmed', hint: 'A unit physically went there', pattern: null, alpha: 1 },
+  { label: 'Reported', hint: 'Seen from a distance, unverified', pattern: 'url(#kStipple)', alpha: 0.58 },
+  { label: 'Inferred', hint: 'Pre-quake city data, never checked', pattern: 'url(#kHatch)', alpha: 0.36 },
+  { label: 'Unknown', hint: 'Nothing has ever looked here', pattern: 'url(#kVoid)', alpha: 0.12 },
 ]
 
-function Legend() {
+function KeyPatterns() {
   return (
-    <div className="border-b border-[#2c2723] px-3 py-2.5">
-      <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80]">
-        Confidence
-      </p>
-      <svg width="0" height="0" className="absolute">
-        <defs>
-          <pattern id="lHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="6" stroke="#6b6055" strokeWidth="1.1" opacity="0.55" />
-          </pattern>
-          <pattern id="lStipple" width="4" height="4" patternUnits="userSpaceOnUse">
-            <circle cx="1" cy="1" r="0.75" fill="#8a7f72" opacity="0.5" />
-          </pattern>
-          <pattern id="lVoid" width="10" height="10" patternUnits="userSpaceOnUse">
-            <circle cx="1" cy="1" r="0.6" fill="#4a423a" opacity="0.55" />
-          </pattern>
-        </defs>
-      </svg>
-      <ul className="space-y-1.5">
-        {SWATCHES.map((s) => (
-          <li key={s.key} className="flex items-start gap-2">
-            <svg width="22" height="22" className="mt-px shrink-0 border border-[#3a342e]">
-              <rect width="22" height="22" fill="#332c25" opacity={s.alpha} />
-              {s.pattern && <rect width="22" height="22" fill={s.pattern} />}
+    <svg width="0" height="0" className="absolute" aria-hidden="true">
+      <defs>
+        <pattern id="kHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="6" stroke="#6b6055" strokeWidth="1.1" opacity="0.55" />
+        </pattern>
+        <pattern id="kStipple" width="4" height="4" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.75" fill="#8a7f72" opacity="0.5" />
+        </pattern>
+        <pattern id="kVoid" width="10" height="10" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.6" fill="#4a423a" opacity="0.55" />
+        </pattern>
+      </defs>
+    </svg>
+  )
+}
+
+/** Unit glyphs, so shape is a real encoding rather than a private one. */
+const GLYPHS = [
+  { d: <polygon points="11,3 19,17 3,17" />, label: 'Aerial scout' },
+  { d: <polygon points="11,3 19,11 11,19 3,11" />, label: 'Crawler' },
+  { d: <polygon points="3,6 19,6 20,16 2,16" />, label: 'Quadruped' },
+  { d: <rect x="4" y="4" width="14" height="14" />, label: 'Tracked rover' },
+]
+
+function Key() {
+  return (
+    <div className="space-y-3 border-b border-[#2b2620] px-3.5 py-3">
+      <KeyPatterns />
+
+      <div className="space-y-1.5">
+        <Label>How sure we are</Label>
+        <ul className="space-y-1.5">
+          {GROUND.map((g) => (
+            <li key={g.label} className="flex items-start gap-2.5">
+              <svg width="22" height="22" className="mt-px shrink-0 border border-[#3a342c]" aria-hidden="true">
+                <rect width="22" height="22" fill="#8a7f70" opacity={g.alpha} />
+                {g.pattern && <rect width="22" height="22" fill={g.pattern} />}
+              </svg>
+              <span className="min-w-0">
+                <span className="block text-[12.5px] leading-tight text-[#e8e1d6]">{g.label}</span>
+                <span className="block text-[11.5px] leading-snug text-[#9a8f80]">{g.hint}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="pt-1 text-[11.5px] leading-relaxed text-[#9a8f80]">
+          Ground fades as its last look ages. Nobody re-checks it for you.
+        </p>
+      </div>
+
+      <div className="space-y-1.5 border-t border-[#2b2620] pt-3">
+        <Label>What the marks mean</Label>
+        <ul className="grid grid-cols-2 gap-x-2 gap-y-1.5">
+          {GLYPHS.map((g) => (
+            <li key={g.label} className="flex items-center gap-1.5">
+              <svg width="22" height="22" className="shrink-0" fill="#f4efe7" aria-hidden="true">
+                {g.d}
+              </svg>
+              <span className="text-[11.5px] leading-tight text-[#9a8f80]">{g.label}</span>
+            </li>
+          ))}
+        </ul>
+        <ul className="space-y-1.5 pt-1">
+          <li className="flex items-center gap-1.5">
+            <svg width="22" height="22" className="shrink-0" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" fill="none" stroke="#e0565c" strokeWidth="2.2" />
             </svg>
-            <span className="min-w-0">
-              <span className="block text-[12px] text-[#e8e1d8]">{s.label}</span>
-              <span className="block text-[11px] leading-snug text-[#9a8f80]">{s.hint}</span>
+            <span className="text-[11.5px] leading-tight text-[#9a8f80]">
+              A person, numbered by triage order
             </span>
           </li>
-        ))}
-      </ul>
-      <p className="mt-2.5 border-t border-[#2c2723] pt-2 text-[11px] leading-relaxed text-[#9a8f80]">
-        Confidence <span className="text-[#dc9a3f]">decays with age</span>. Ground nobody has
-        re-checked slides back down this list on its own.
-      </p>
+          <li className="flex items-center gap-1.5">
+            <svg width="22" height="22" className="shrink-0" aria-hidden="true">
+              <circle cx="11" cy="11" r="9" fill="none" stroke="#9a8f80" strokeWidth="1.2" strokeDasharray="3 3" />
+            </svg>
+            <span className="text-[11.5px] leading-tight text-[#9a8f80]">
+              Where a silent unit might be
+            </span>
+          </li>
+          <li className="flex items-center gap-1.5">
+            <svg width="22" height="22" className="shrink-0" aria-hidden="true">
+              <rect x="2" y="2" width="18" height="18" fill="none" stroke="#dc9a3f" strokeWidth="1.4" strokeDasharray="4 3" />
+            </svg>
+            <span className="text-[11.5px] leading-tight text-[#9a8f80]">Ground in dispute</span>
+          </li>
+        </ul>
+      </div>
     </div>
   )
 }
@@ -64,12 +117,10 @@ function Inspector() {
 
   if (!inspect) {
     return (
-      <div className="px-3 py-2.5">
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80]">
-          Provenance
-        </p>
-        <p className="mt-1.5 text-[11px] leading-relaxed text-[#9a8f80]">
-          Click any cell to see who reported it and how old that report is.
+      <div className="px-3.5 py-3">
+        <Label>Where does this come from?</Label>
+        <p className="mt-1.5 text-[11.5px] leading-relaxed text-[#9a8f80]">
+          Click anywhere on the map to see who reported that ground and how long ago.
         </p>
       </div>
     )
@@ -78,61 +129,58 @@ function Inspector() {
   const cell = state.grid[inspect.y]?.[inspect.x]
   if (!cell) return null
   const conf = decayed(cell.conf, cell.observedAt, state.now)
-  const stale = stalenessRatio(cell, state.now)
+  const left = minutesToDecay(cell, state.now)
+  const sure = certainty(cell, state.now)
   const contested = state.contests.find(
     (f) => !f.resolution && f.cells.some(([x, y]) => x === inspect.x && y === inspect.y),
   )
 
   return (
-    <div className="px-3 py-2.5">
-      <div className="flex items-baseline justify-between">
-        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#9a8f80]">
-          Provenance
-        </p>
-        <span className="tnum font-mono text-[10px] text-[#9a8f80]">
+    <div className="px-3.5 py-3">
+      <div className="flex items-baseline justify-between gap-2">
+        <Label>Where does this come from?</Label>
+        <span className="tnum font-mono text-[11px] text-[#9a8f80]">
           {inspect.x}, {inspect.y}
         </span>
       </div>
 
-      <dl className="mt-2 space-y-1.5 text-[12px]">
+      <dl className="mt-2.5 space-y-1.5 text-[12.5px]">
         <div className="flex justify-between gap-2">
-          <dt className="text-[#9a8f80]">Belief</dt>
-          <dd className="text-[#f2ede6]">{conf}</dd>
+          <dt className="text-[#9a8f80]">We believe</dt>
+          <dd className="text-[#f4efe7]">{conf}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-[#9a8f80]">Passable</dt>
+          <dt className="text-[#9a8f80]">Can we cross it</dt>
           <dd style={{ color: cell.passable ? '#62ab82' : '#e0565c' }}>
             {cell.passable ? 'yes' : 'no'}
           </dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-[#9a8f80]">Source</dt>
-          <dd className="font-mono text-[11px] text-[#f2ede6]">{cell.observedBy ?? '—'}</dd>
+          <dt className="text-[#9a8f80]">Who says so</dt>
+          <dd className="font-mono text-[11.5px] text-[#f4efe7]">{cell.observedBy ?? 'nobody'}</dd>
         </div>
         <div className="flex justify-between gap-2">
-          <dt className="text-[#9a8f80]">Observed</dt>
-          <dd className="text-[#f2ede6]">{ageLabel(cell.observedAt, state.now)}</dd>
+          <dt className="text-[#9a8f80]">Last looked</dt>
+          <dd className="text-[#f4efe7]">{ageLabel(cell.observedAt, state.now)}</dd>
         </div>
       </dl>
 
-      {cell.observedAt !== null && conf !== 'unknown' && conf !== 'inferred' && (
-        <div className="mt-2.5">
-          <div className="flex items-baseline justify-between">
-            <span className="text-[11px] text-[#9a8f80]">Decays a step in</span>
-            <span className="tnum font-mono text-[11px] text-[#dc9a3f]">
-              {Math.max(0, Math.round((1 - stale) * (conf === 'confirmed' ? 14 : 9)))} min
-            </span>
+      {left !== null && (
+        <div className="mt-3">
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="text-[11.5px] text-[#9a8f80]">Downgrades in</span>
+            <span className="tnum text-[11.5px] text-[#dc9a3f]">{left} min</span>
           </div>
-          <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-[#2c2723]">
-            <div className="h-full rounded-full bg-[#dc9a3f]" style={{ width: `${stale * 100}%` }} />
+          <div className="mt-1.5 h-[3px] w-full overflow-hidden bg-[#2b2620]">
+            <div className="h-full bg-[#dc9a3f]" style={{ width: `${(1 - sure) * 100}%` }} />
           </div>
         </div>
       )}
 
       {contested && (
-        <p className="mt-2.5 border-l-2 border-[#dc9a3f] pl-2 text-[11px] leading-snug text-[#dc9a3f]">
-          This cell is contested — {contested.subject}. Routes treat it as impassable until Command
-          adjudicates.
+        <p className="mt-3 border-l-2 border-[#dc9a3f] pl-2.5 text-[11.5px] leading-relaxed text-[#dc9a3f]">
+          Two units disagree about this ground. Every route treats it as blocked until somebody
+          settles it.
         </p>
       )}
     </div>
@@ -141,8 +189,8 @@ function Inspector() {
 
 export function MapAside() {
   return (
-    <aside className="flex min-h-0 flex-col overflow-y-auto border-t border-[#2c2723] bg-[#151210]">
-      <Legend />
+    <aside className="flex flex-1 flex-col border-t border-[#2b2620] bg-[#17140f]">
+      <Key />
       <Inspector />
     </aside>
   )
