@@ -2,16 +2,18 @@
 
 **Command a rescue swarm through a city you cannot see, using information you cannot fully trust.**
 
-### ▶ [Open the live command deck](https://aaaditt.github.io/UXcelerate/)
+### ▶ [Open the live command deck](https://cairn-eight-kappa.vercel.app)
 
 *The incident plays itself — about 30 seconds end to end. Nothing to install, nothing to set up.*
+
+Mirror, in case the first is slow: [aaaditt.github.io/UXcelerate](https://aaaditt.github.io/UXcelerate/) — same build, deployed twice so a dead link cannot cost the entry.
 
 Submission for **UXcelerate!** — the IEI BPDC UI/UX challenge, 5–6 September 2026.
 Forked from [ieibpdc/UXcelerate](https://github.com/ieibpdc/UXcelerate).
 
 ---
 
-[![Everything six robots have seen after eleven minutes](docs/img/age-view.png)](https://aaaditt.github.io/UXcelerate/)
+[![Everything six robots have seen after eleven minutes](docs/img/age-view.png)](https://cairn-eight-kappa.vercel.app)
 
 <sup>**This is not a styling choice.** It is the map switched to *How old it is*, eleven minutes into the incident: every patch of ground six robots have actually observed, and nothing else. Bright was seen seconds ago, dim minutes ago, black never. **81% of the district has never been observed by anything.** An interface that draws the rest as though it were known is lying to the person who has to walk into it.</sup>
 
@@ -117,4 +119,4 @@ npm run dev
 
 ---
 
-*Built for UXcelerate! 2026 · [Live deck](https://aaaditt.github.io/UXcelerate/) · [Competition repo](https://github.com/ieibpdc/UXcelerate)*
+*Built for UXcelerate! 2026 · [Live deck](https://cairn-eight-kappa.vercel.app) · [Competition repo](https://github.com/ieibpdc/UXcelerate)*
