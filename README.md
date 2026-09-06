@@ -13,7 +13,7 @@ Forked from [ieibpdc/UXcelerate](https://github.com/ieibpdc/UXcelerate).
 
 [![Everything six robots have seen after eleven minutes](docs/img/age-view.png)](https://aaaditt.github.io/UXcelerate/)
 
-<sup>**This is not a styling choice.** It is the map switched to *How old it is*, eleven minutes into the incident: every patch of ground six robots have actually observed, and nothing else. Bright was seen seconds ago, dim minutes ago, black never. **Almost the entire district is black.** An interface that draws the rest as though it were known is lying to the person who has to walk into it.</sup>
+<sup>**This is not a styling choice.** It is the map switched to *How old it is*, eleven minutes into the incident: every patch of ground six robots have actually observed, and nothing else. Bright was seen seconds ago, dim minutes ago, black never. **81% of the district has never been observed by anything.** An interface that draws the rest as though it were known is lying to the person who has to walk into it.</sup>
 
 ---
 

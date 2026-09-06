@@ -107,9 +107,10 @@ export function Briefing({ onEnter }: { onEnter: () => void }) {
             <span className="text-[#e8e1d6]">
               This is everything the swarm has seen after eleven minutes.
             </span>{' '}
-            Bright ground was observed seconds ago, dim ground minutes ago, black ground never. A
-            rescue interface that draws the other 94% as though it were known is lying to the
-            person who has to walk into it.
+            Bright ground was observed seconds ago, dim ground minutes ago, black ground never.
+            Four fifths of this district has never been looked at by anything. An interface that
+            draws that part as though it were known is lying to the person who has to walk into
+            it.
           </p>
         </div>
       </div>
