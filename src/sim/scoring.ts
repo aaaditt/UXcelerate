@@ -162,7 +162,10 @@ function survivability(s: Survivor, now: number): { v: number; factors: Factor[]
     factors: [
       { label: 'Vitals confidence', value: s.vitalsConfidence, detail: `${s.signals.join(' + ')} — ${Math.round(s.vitalsConfidence * 100)}% sure a person is there` },
       { label: 'Void space', value: voidW, detail: `${s.voidSpace} void — survivable volume around the casualty` },
-      { label: 'Corroboration', value: corroboration, detail: `${s.signals.length} independent sensor${s.signals.length === 1 ? '' : 's'} agree` },
+      { label: 'Corroboration', value: corroboration, detail:
+          s.signals.length === 1
+            ? '1 independent sensor — nothing corroborates it'
+            : `${s.signals.length} independent sensors agree` },
       { label: 'Time since detection', value: timePenalty, detail: `${Math.round(ageMin)} min elapsed` },
     ],
   }

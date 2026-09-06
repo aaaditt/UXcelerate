@@ -100,7 +100,7 @@ function Row({ entry, index }: { entry: TriageEntry; index: number }) {
                       onClick={() => assign(s.id, r.id)}
                     >
                       <span className="font-mono text-[11px]">{r.name}</span>
-                      {unheard && <span className="ml-1 text-[10px] text-[#dc9a3f]">· dark</span>}
+                      {unheard && <span className="ml-1 text-[10px] text-[#dc9a3f]">{' · dark'}</span>}
                     </Button>
                   )
                 })}
