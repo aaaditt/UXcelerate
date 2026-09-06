@@ -31,11 +31,20 @@ const OFF_X = 17
 const OFF_Y = -17
 
 /** Base tone by what the ground IS, before we account for how sure we are. */
+/**
+ * Base tone by what the ground IS, before we account for how sure we are.
+ *
+ * Kind is tested before passability on purpose. An earlier version checked
+ * `!passable` first, which meant every intact building rendered in the rubble
+ * tone - so a district that had barely been touched looked like it had
+ * pancaked end to end. Standing and fallen must not look the same.
+ */
 function baseFill(kind: string, passable: boolean): string {
-  if (kind === 'rubble' || !passable) return '#382a24'
+  if (kind === 'rubble') return '#4a3128'
   if (kind === 'street') return '#8a7f70'
   if (kind === 'plaza') return '#75695b'
-  return '#443a31'
+  if (kind === 'block') return '#2f2822'
+  return passable ? '#443a31' : '#2f2822'
 }
 
 /** In the age view, recency reads as warmth — fresh is bright, old is cold. */
@@ -248,6 +257,18 @@ export function CityMap() {
                     fill={showingAge ? ageFill(age) : baseFill(cell.kind, cell.passable)}
                     opacity={showingAge ? 1 : sure}
                   />
+                  {!showingAge && cell.kind === 'block' && (
+                    <line
+                      x1={cell.x * CELL}
+                      y1={cell.y * CELL + 0.5}
+                      x2={cell.x * CELL + CELL}
+                      y2={cell.y * CELL + 0.5}
+                      stroke="#6d6154"
+                      strokeWidth="1"
+                      opacity={sure * 0.55}
+                      pointerEvents="none"
+                    />
+                  )}
                   {!showingAge && tex && (
                     <rect
                       x={cell.x * CELL}
@@ -258,7 +279,7 @@ export function CityMap() {
                       pointerEvents="none"
                     />
                   )}
-                  {!showingAge && !cell.passable && cell.kind === 'rubble' && (
+                  {!showingAge && cell.kind === 'rubble' && (
                     <rect
                       x={cell.x * CELL}
                       y={cell.y * CELL}
@@ -350,8 +371,9 @@ export function CityMap() {
 
         {/* ── units, with honest uncertainty ───────────────────────── */}
         <g>
-          {state.robots.map((r) => {
+          {state.robots.map((r, i) => {
             const rad = uncertaintyRadius(r, state.now)
+            const labelY = i % 2 === 0 ? 22 : -15
             return (
               <g key={r.id} transform={`translate(${r.x * CELL + CELL / 2} ${r.y * CELL + CELL / 2})`}>
                 {rad > 0.05 && (
@@ -373,7 +395,7 @@ export function CityMap() {
                 >
                   <RobotGlyph r={r} selected={selectedRobot === r.id} />
                   <text
-                    y="22"
+                    y={labelY}
                     textAnchor="middle"
                     fontSize="9"
                     fill="#b9af9f"

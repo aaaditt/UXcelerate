@@ -7,6 +7,7 @@ import { CommandBar } from './components/shell/CommandBar'
 import { LogFeed } from './components/shell/LogFeed'
 import { Timeline } from './components/time/Timeline'
 import { TriagePanel } from './components/triage/TriagePanel'
+import { Briefing } from './process/Briefing'
 import { CaseStudy } from './process/CaseStudy'
 import { BEATS } from './sim/script'
 import { MissionProvider, useMission } from './state/MissionProvider'
@@ -41,47 +42,6 @@ function Shortcuts() {
   return null
 }
 
-const ORIENTED = 'cairn.oriented'
-
-/**
- * One line, once. Not a tour, not a modal, not a five-step overlay — those all
- * assume the interface cannot explain itself. This says the single thing that
- * is not guessable from looking, then gets out of the way for good.
- */
-function Orientation() {
-  const [seen, setSeen] = useState(() => {
-    try {
-      return localStorage.getItem(ORIENTED) === '1'
-    } catch {
-      return false
-    }
-  })
-  if (seen) return null
-
-  return (
-    <div className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-[#dc9a3f]/35 bg-[#dc9a3f]/8 px-4 py-2.5">
-      <p className="flex-1 text-[12.5px] leading-relaxed text-[#e8e1d6]">
-        Nothing on this map is a fact — it is a belief with an age. Hatched ground is pre-quake
-        city data that nobody has been to. The incident is playing itself; press{' '}
-        <kbd className="border border-[#554d43] px-1 font-mono text-[11px]">space</kbd> to pause.
-      </p>
-      <button
-        onClick={() => {
-          try {
-            localStorage.setItem(ORIENTED, '1')
-          } catch {
-            /* private window, and it does not matter */
-          }
-          setSeen(true)
-        }}
-        className="shrink-0 border border-[#554d43] px-2.5 py-1 text-[12px] text-[#e8e1d6] hover:bg-[#201c17]"
-      >
-        Got it
-      </button>
-    </div>
-  )
-}
-
 function Deck() {
   const [showCase, setShowCase] = useState(false)
 
@@ -89,7 +49,6 @@ function Deck() {
     <div className="flex h-full flex-col bg-[#0f0d0b]">
       <Shortcuts />
       <CommandBar onOpenProcess={() => setShowCase(true)} />
-      <Orientation />
 
       <div className="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-[252px_minmax(0,1fr)_340px]">
         {/* left rail: what we have, and what the map is saying */}
@@ -128,6 +87,12 @@ function Deck() {
 }
 
 export default function App() {
+  const [entered, setEntered] = useState(false)
+
+  // The deck mounts only after the briefing, so the incident starts playing
+  // when somebody is actually watching it rather than in a background tab.
+  if (!entered) return <Briefing onEnter={() => setEntered(true)} />
+
   return (
     <MissionProvider>
       <Deck />
