@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   CAIRN design tokens.
+   Thesis: colour is a scarce resource. In this interface it only
+   ever means risk or confidence — never decoration, never branding.
+   Everything else is warm graphite and typographic hierarchy.
+   --------------------------------------------------------------- */
+@theme {
+  /* surfaces — warm graphite, not the blue-black of a game HUD */
+  --color-s0: #100e0c;
+  --color-s1: #191614;
+  --color-s2: #221e1a;
+  --color-s3: #2c2723;
+  --color-line: #3a342e;
+  --color-line-hi: #544c43;
+
+  /* type */
+  --color-ink: #f2ede6;
+  --color-ink-2: #b7ada0;
+  --color-ink-3: #857b6f;
+
+  /* severity — the only decorative-looking colour allowed */
+  --color-critical: #e0565c;
+  --color-urgent: #dc9a3f;
+  --color-stable: #62ab82;
+  --color-aerial: #7d9fc4;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-s0);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;              /* 14px floor — no 10px telemetry soup */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* machine data gets tabular figures so columns don't jitter as they tick */
+.tnum { font-variant-numeric: tabular-nums; }
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

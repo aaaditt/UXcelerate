@@ -1,27 +1,32 @@
-# UXcelerate!
+# React + TypeScript + Vite
 
-Welcome! Follow the steps below to participate and submit your entry.
+This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
-## How to Participate
+Currently, two official plugins are available:
 
-1. **Fork this repository**
-   Click the **Fork** button at the top right of this repo to create your own copy under your GitHub account.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-2. **Build your submission**
-   Work entirely within your forked repository. Design and build your UI/UX submission according to the challenge brief. Commit your work as you go so we can see your process.
+## React Compiler
 
-3. **Deploy your project (optional)**
-   If you'd like, deploy your project (e.g. Vercel, Netlify, GitHub Pages) and add the live link to your repo's README or description. This isn't mandatory, but it's a great way to showcase your work.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-4. **Submit your forked repo**
-   Once you're done, copy the link to your forked repository and submit it via the official submission form:
+## Expanding the Oxlint configuration
 
-   👉 **[[UXcelerate]](https://docs.google.com/forms/d/e/1FAIpQLSdF-HbTXtL_Qk098nPxq8cwys_6ANyRC2fb8I2SQCcYy4XXuQ/viewform?usp=publish-editor)**
+If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
 
-## Notes
+```json
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "options": {
+    "typeAware": true
+  },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+  }
+}
+```
 
-- Make sure your forked repo is public so we can review it.
-- Double-check your form submission includes the correct repo link before the deadline.
-- Reach out to the IEI team if you run into any issues.
-
-Good luck, and have fun building! 🎨
+See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
