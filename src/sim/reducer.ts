@@ -55,6 +55,24 @@ function applyEvent(s: MissionState, e: MissionEvent): MissionState {
         cell.observedBy = e.by
         if (c.kind) cell.kind = c.kind
       }
+
+      // A unit that physically drove the ground produces evidence, and evidence
+      // settles a dispute that two remote sensors could only argue about. This
+      // is what makes the T+11 backfill actually resolve the T+04 contest
+      // rather than merely narrating that it did.
+      if (e.conf === 'confirmed') {
+        const observed = new Map(e.cells.map((c) => [`${c.x},${c.y}`, c.passable]))
+        for (const fact of s.contests) {
+          if (fact.resolution) continue
+          const covered = fact.cells.every(([x, y]) => observed.has(`${x},${y}`))
+          if (!covered) continue
+          const passable = observed.get(`${fact.cells[0][0]},${fact.cells[0][1]}`)!
+          const side = fact.claimA.passable === passable ? 'a' : 'b'
+          fact.resolution = side
+          fact.resolvedAt = e.t
+          fact.resolvedBy = e.by
+        }
+      }
       return s
     }
 
@@ -145,8 +163,11 @@ function applyDecisions(s: MissionState, d: Decisions, now: number): MissionStat
     if (a.at > now) continue
     const fact = s.contests.find((f) => f.id === a.factId)
     if (!fact) continue
+    // Physical evidence outranks a judgement call made earlier on worse data.
+    if (fact.resolvedBy && fact.resolvedBy !== 'command' && (fact.resolvedAt ?? 0) > a.at) continue
     fact.resolution = a.choice
     fact.resolvedAt = a.at
+    fact.resolvedBy = 'command'
     if (a.choice === 'a' || a.choice === 'b') {
       const claim = a.choice === 'a' ? fact.claimA : fact.claimB
       for (const [x, y] of fact.cells) {

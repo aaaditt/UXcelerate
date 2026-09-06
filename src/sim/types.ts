@@ -140,6 +140,11 @@ export interface ContestedFact {
   raisedAt: number
   resolution: 'a' | 'b' | 'verify' | null
   resolvedAt: number | null
+  /**
+   * Who settled it. A commander adjudication names the commander; a physical
+   * traversal names the unit, because evidence outranks a judgement call.
+   */
+  resolvedBy: 'command' | string | null
 }
 
 // ------------------------------------------------------------------- events

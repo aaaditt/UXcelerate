@@ -164,6 +164,7 @@ export const EVENTS: MissionEvent[] = [
       },
       resolution: null,
       resolvedAt: null,
+      resolvedBy: null,
     },
   },
   log(4, 'CONTESTED: SKYEYE-1 and TITAN-2 disagree about Almeida St. Adjudication required.', 'warn'),

@@ -42,13 +42,21 @@ function Fact({ fact }: { fact: ContestedFact }) {
   if (fact.resolution) {
     const chosen =
       fact.resolution === 'a' ? fact.claimA.by : fact.resolution === 'b' ? fact.claimB.by : null
+    const byEvidence = !!fact.resolvedBy && fact.resolvedBy !== 'command'
     return (
       <article className="border-b border-[#2c2723] px-3 py-2.5">
-        <p className="text-[12px] font-medium text-[#f2ede6]">{fact.subject}</p>
-        <p className="mt-1 text-[11px] leading-snug text-[#62ab82]">
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="text-[12px] font-medium text-[#f2ede6]">{fact.subject}</p>
+          <Tag tone={byEvidence ? 'good' : 'neutral'}>
+            {byEvidence ? 'Settled by evidence' : 'Adjudicated'}
+          </Tag>
+        </div>
+        <p className="mt-1.5 text-[11px] leading-snug text-[#62ab82]">
           {fact.resolution === 'verify'
             ? 'Verification tasked — treated as blocked until a unit physically confirms.'
-            : `Adjudicated in favour of ${chosen} at T+${fact.resolvedAt?.toFixed(1)}.`}
+            : byEvidence
+              ? `${fact.resolvedBy} physically traversed this ground at T+${fact.resolvedAt?.toFixed(1)}, which settles it in favour of ${chosen}. Evidence outranks a judgement call.`
+              : `Command adjudicated in favour of ${chosen} at T+${fact.resolvedAt?.toFixed(1)}.`}
         </p>
       </article>
     )
