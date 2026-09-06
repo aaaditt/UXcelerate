@@ -9,6 +9,10 @@
 Submission for **UXcelerate!** — the IEI BPDC UI/UX challenge, 5–6 September 2026.
 Forked from [ieibpdc/UXcelerate](https://github.com/ieibpdc/UXcelerate).
 
+[![CAIRN command deck at T+11](docs/img/backfill.png)](https://aaaditt.github.io/UXcelerate/)
+
+<sup>**T+11 — store-and-forward.** MOLE-6 returns from three minutes of radio silence. Its observations are stamped `OCCURRED T+9.2` in the log because they arrived late, and the ground it physically drove has just **settled the argument** that two remote sensors could only disagree about.</sup>
+
 ---
 
 > *A cairn is what people build to mark a safe route when there is no map.*
@@ -61,6 +65,11 @@ Six named beats, jumpable from the timeline or with keys `1`–`6`:
 
 **Keyboard:** `space` play/pause · `1`–`6` jump to beat · `esc` clear selection
 **In-app:** the full written case study is behind *Design case study* in the top right.
+
+| | |
+|---|---|
+| ![Contested fact at T+4](docs/img/contested.png) | ![Triage score breakdown](docs/img/triage.png) |
+| **T+04 — the system refuses to choose.** Both claims are attributed with their sensor and timestamp. Until Command adjudicates, the contested cells stay impassable in every route we calculate. | **Every rank shows its arithmetic.** Vitals confidence, void space, corroboration, elapsed time and route trust — plus what would change the ordering. |
 
 ## Accessibility — stated honestly
 
