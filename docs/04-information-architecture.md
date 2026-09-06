@@ -38,6 +38,24 @@ If confidence is encoded as material, the key to that material must be **permane
 - **No notification toasts.** See [`03-user-flows.md`](03-user-flows.md), Flow A.
 - **No settings, no login, no theme toggle.** Nothing that is not the incident.
 
+## The rejected option: a real basemap
+
+The obvious move is to drop markers onto OpenStreetMap, or to build a 3D city. Both were considered and rejected, and the reason is the entire thesis.
+
+**A photographic basemap asserts that the city is known.** Every road drawn crisply underneath the robots is a claim that somebody has verified it — which is exactly what the brief says is not true. Render a pristine street network and you have designed away the problem you were asked to solve; the uncertainty can then only be a decoration layered on top of an authoritative picture.
+
+Hand-drawing the district in SVG buys three things instead:
+
+1. **Uncertainty becomes drawable.** Confidence *is* the map — its texture, its opacity, its fade over time. That is not available when compositing over somebody else's tiles.
+2. **It cannot fail.** No WebGL context, no tile server, no network dependency in the render path.
+3. **It is honest about scale.** Six units covering a few percent of a sector. A detailed 3D city makes that look like coverage. A field of black does not.
+
+## The entry screen
+
+The deck opens behind a briefing rather than dropping a visitor straight into it. A command interface seen cold is unreadable — panels and a dark map, with no way to know what the idea was. The briefing states the reframe, then uses the *How old it is* view as its hero, because the strongest argument the product can make is the sight of how little has actually been seen.
+
+It is one screen and one button, not a guided tour. A tour would be an admission that the interface cannot explain itself.
+
 ## Responsive behaviour
 
 Below the `lg` breakpoint the three columns collapse to a single scrolling column: map and timeline first, then triage, contested facts, log, fleet, legend. The map keeps its aspect ratio and stays legible; nothing is hidden, only re-stacked. This is a command-desk product, so desktop is the honest primary target — but a tablet at a forward staging point is plausible enough that it must not break.

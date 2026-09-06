@@ -1,17 +1,19 @@
 # CAIRN
 
-**Command a robot swarm through a city you cannot see, using information you cannot fully trust.**
+**Command a rescue swarm through a city you cannot see, using information you cannot fully trust.**
 
 ### ▶ [Open the live command deck](https://aaaditt.github.io/UXcelerate/)
 
-*The incident plays itself — about 30 seconds end to end. Press space to pause, or jump straight to any beat.*
+*The incident plays itself — about 30 seconds end to end. Nothing to install, nothing to set up.*
 
 Submission for **UXcelerate!** — the IEI BPDC UI/UX challenge, 5–6 September 2026.
 Forked from [ieibpdc/UXcelerate](https://github.com/ieibpdc/UXcelerate).
 
-[![CAIRN command deck at T+11](docs/img/backfill.png)](https://aaaditt.github.io/UXcelerate/)
+---
 
-<sup>**T+11 — store-and-forward.** MOLE-6 returns from three minutes of radio silence. Its observations are stamped `OCCURRED T+9.2` in the log because they arrived late, and the ground it physically drove has just **settled the argument** that two remote sensors could only disagree about.</sup>
+[![Everything six robots have seen after eleven minutes](docs/img/age-view.png)](https://aaaditt.github.io/UXcelerate/)
+
+<sup>**This is not a styling choice.** It is the map switched to *How old it is*, eleven minutes into the incident: every patch of ground six robots have actually observed, and nothing else. Bright was seen seconds ago, dim minutes ago, black never. **Almost the entire district is black.** An interface that draws the rest as though it were known is lying to the person who has to walk into it.</sup>
 
 ---
 
@@ -31,10 +33,10 @@ CAIRN's primary object is therefore a *decision under uncertainty*, not a fleet.
 
 | The brief says | CAIRN does |
 |---|---|
-| **Maps may be incomplete** | Confidence is drawn as **material** — solid, stipple, hatch, void — never as colour alone, so it survives greyscale and colour blindness. And it **decays with age**: ground nobody re-checks slides from *confirmed* → *reported* → *inferred* on its own. The map visibly forgets. |
-| **Robots discover contradictions** | When the aerial unit says a street is clear and the ground unit says it is blocked, the system **refuses to silently pick a winner**. It raises a contested fact, attributes both claims with sensor and timestamp, and shows what each choice does to the triage order. |
-| **Communication may be unreliable** | A dark unit is **never removed from the map**. It holds its last-known position inside an uncertainty ellipse that **grows as contact ages**. Orders queue instead of failing, and the fleet list counts *"orders this unit does not know about yet."* |
-| **Continuous discovery** | Discoveries enter as **candidates to be triaged in**, never as toasts that vanish carrying the only copy of the information. The queue ranks *people*, shows its arithmetic, and states the counterfactual: *"rank 3 → rank 1 if Almeida St is confirmed passable."* |
+| **Maps may be incomplete** | Certainty is drawn as **material** — solid, stipple, hatch, void — never as colour alone, so it survives greyscale and colour blindness. And it **decays continuously with age**: ground nobody re-checks fades on screen while you watch, and an aftershock demotes the whole district at once. Certainty is a function of time, not a flag somebody set. |
+| **Robots discover contradictions** | When the drone says a street is clear and the rover says it is blocked, the system **refuses to silently pick a winner**. It raises the dispute, attributes both claims with sensor and timestamp, and shows what each answer costs in triage order. |
+| **Communication may be unreliable** | A unit that cannot hear us is **never removed from the map**. It holds its last-known position inside a circle that **grows as contact ages**. Orders queue instead of failing, and the fleet counts *"orders this unit does not know about yet."* |
+| **Continuous discovery** | Discoveries enter as **candidates to be triaged in**, never as toasts that vanish carrying the only copy of the information. The queue ranks *people*, shows its arithmetic, and states the counterfactual: *"rank 3 → rank 1 if Almeida St is passable."* |
 
 ## The idea that makes it work
 
@@ -46,59 +48,67 @@ state(T) = EVENTS.filter(e => e.known <= T)   // what Command has received
                  .reduce(applyEvent, seed)
 ```
 
-For a live unit the two clocks are identical. For MOLE-6 — dark at T+08, back at T+11 — they diverge, and its three minutes of observations arrive **already stale**, slotting into the timeline where they really belong.
+For a live unit the two clocks are identical. For MOLE-6 — dark at eight minutes, back at eleven — they diverge, and its three minutes of observations arrive **already stale**, slotting into the timeline where they really belong.
 
-**The map gains information about its own past.** Store-and-forward, the timeline scrubber, confidence decay, and "what did we know at T+04" are all the same query with a different bound. This is the rare case where the engineering choice and the design choice are the same choice.
+**The map gains information about its own past**, and that backfill is what finally settles a dispute raised seven minutes earlier. Store-and-forward, the timeline scrubber, confidence decay, and "what did we know at four minutes" are all the same query with a different bound. This is the rare case where the engineering choice and the design choice are the same choice.
+
+## Why there is no 3D city and no real basemap
+
+The most tempting thing to build here is a photoreal 3D district, or markers dropped onto OpenStreetMap. Both were deliberately rejected, and the reason is the whole argument:
+
+**A photographic basemap asserts that the city is known.** Every road drawn crisply underneath your robots is a claim that somebody has verified it — which is precisely the thing the brief says is not true. The moment you render a pristine street network, you have designed away the problem you were asked to solve.
+
+So the district is hand-drawn SVG over a deterministic simulation. That buys three things a vendor basemap cannot:
+
+1. **Uncertainty becomes drawable.** Confidence *is* the map — the texture, the opacity, the fade. That is not possible when you are compositing on top of somebody else's authoritative tiles.
+2. **It cannot fail.** No WebGL context, no tile server, no network dependency in the render path. It draws on a judge's laptop, in a projector room, on a phone.
+3. **It is honest about scale.** Six robots, eleven minutes, a few percent of a sector. A slick 3D city makes that look like coverage. A field of black does not.
 
 ## Walk it in 90 seconds
 
-Six named beats, jumpable from the timeline or with keys `1`–`6`:
+Six named moments, jumpable from the timeline or with keys `1`–`6`:
 
-| | Beat | What to watch |
+| | Moment | What to watch |
 |---|---|---|
-| **T+00** | Baseline | Most of the map is hatched — that is *pre-quake municipal data*, not ground truth. Sector verified: 2%. |
-| **T+02** | Life signal | A thermal bloom over Block C enters triage as a **candidate**, at 41% vitals confidence. Open it — the ranking shows its arithmetic. |
-| **T+04** | Contested ground | Air and ground disagree. Read both claims, then adjudicate. Watch the triage order and the map change together. |
-| **T+06** | Aftershock | M4.6. Every *confirmed* cell in the district is demoted to *reported*. The picture rots in one step. |
-| **T+08** | Mesh failure | Two units go dark. Their uncertainty ellipses grow. Dispatch one anyway — the order **queues**. |
-| **T+11** | Store-and-forward | MOLE-6 returns with three minutes of the past. The comms log stamps them `occurred T+9.2`, and the backfill **settles the T+04 argument**. |
+| **0m** | Baseline | Most of the map is hatched — that is *pre-quake city data*, not ground truth. Sector verified: 1%. |
+| **2m** | Life signal | A thermal bloom over Block C enters triage as a **candidate** at 41% confidence. Open it: the ranking shows its arithmetic. |
+| **4m** | Contested ground | Air and ground disagree. Read both claims, then decide. The triage order and the map change together. |
+| **6m** | Aftershock | M4.6. Every *confirmed* cell in the district is demoted at once. Sector verified drops to **0%**. |
+| **8m** | Mesh failure | Two units go dark. Their uncertainty circles grow. Send one anyway — the order **queues**, and the top bar counts it. |
+| **11m** | Store-and-forward | MOLE-6 returns with three minutes of the past, stamped `happened at T+9.2`, and it **settles the 4m argument**. |
 
-**Keyboard:** `space` play/pause · `1`–`6` jump to beat · `esc` clear selection
-**In-app:** the full written case study is behind *Design case study* in the top right.
+**Keyboard:** `space` plays and pauses · `1`–`6` jump between moments · `esc` clears the selection
+**In-app:** the full written case is behind *Read the design case*, top right.
 
 | | |
 |---|---|
-| ![Contested fact at T+4](docs/img/contested.png) | ![Triage score breakdown](docs/img/triage.png) |
-| **T+04 — the system refuses to choose.** Both claims are attributed with their sensor and timestamp. Until Command adjudicates, the contested cells stay impassable in every route we calculate. | **Every rank shows its arithmetic.** Vitals confidence, void space, corroboration, elapsed time and route trust — plus what would change the ordering. |
+| ![A contested fact at four minutes](docs/img/contested.png) | ![Store-and-forward at eleven minutes](docs/img/backfill.png) |
+| **4m — the system refuses to choose.** Both claims attributed with sensor and timestamp. Until it is settled, the ground stays impassable in every route we calculate. | **11m — the past arrives late.** The comms log stamps the backfill `happened at T+9.2`, and evidence from a physical traversal outranks the earlier judgement call. |
 
 ## Accessibility — stated honestly
 
-An unverifiable conformance badge is worse than no badge, so:
+**Lighthouse rates the live build 100 for accessibility, 100 best practices, 100 SEO.** That is a floor, not a certificate — and there is no badge on this repo, because a badge you cannot verify is worse than none.
 
-**Lighthouse: accessibility 100, best practices 100, SEO 100** on the live build — after fixing the two real failures the first run surfaced. That score is a floor, not a certificate; it cannot see either gap listed below.
+**Holds up.** No information is carried by colour alone — certainty is texture, triage order is a numeral, link state is a sentence. Body text never drops below 14px, with tabular figures on anything that ticks. Every control is keyboard reachable with a visible focus ring, and `prefers-reduced-motion` is respected.
 
-**Holds up.** No information is carried by colour alone — confidence is texture, triage order is a numeral, link state is a word. Body text meets WCAG AA contrast on the graphite surfaces, with a 14px floor. Every control is keyboard reachable with a visible focus ring. `prefers-reduced-motion` is respected. The map carries a text alternative summarising its state.
-
-**Does not yet.** The SVG map is not fully keyboard navigable — cells are clickable but not tabbable, so a screen-reader user gets the summary and the panels but not per-cell provenance. Map callsigns render at 8.5px, breaking the 14px floor the design system sets for itself. Both are documented in [`docs/06-accessibility-audit.md`](docs/06-accessibility-audit.md) rather than hidden.
+**Does not.** The SVG map is not keyboard navigable, so per-cell provenance is mouse-only, and there is no live region announcing incident events to a screen reader. Both are written up in [`docs/06-accessibility-audit.md`](docs/06-accessibility-audit.md) rather than hidden.
 
 ## Design system in one paragraph
 
-**Colour is a scarce resource.** Real safety-critical equipment — ICU monitors, air traffic displays, INSARAG field kit — is not neon. Here colour only ever means risk or confidence; there is no brand accent. When something turns amber on this screen, it means something. Body text never drops below 14px, because dense tactical UIs habitually fall to 10px and lose all hierarchy exactly when load matters most. Telemetry uses tabular figures so columns do not jitter as they tick. Warm graphite, not blue-black — this should read as an instrument someone is accountable for, not a prop.
+**Colour is a scarce resource.** Real safety-critical equipment — ICU monitors, air traffic displays, INSARAG field kit — is not neon. Here colour only ever means risk or confidence; there is no brand accent, and interactive state is carried by weight, border and a bright neutral instead of hue. When something turns amber on this screen, it means something. An earlier version of this deck had a tracked-out capitalised label above every panel and monospace on every number; it looked technical, but it was decoration pretending to be structure, and it made six panels shout equally. Stripping it back to sentence case and letting weight, size and space carry the hierarchy made the whole screen quieter and faster to read. Type is IBM Plex, drawn for technical instruments; monospace survives only where the content is genuinely machine output.
 
 ## Process documents
 
-- [`01-research.md`](docs/01-research.md) — domain grounding and what real USAR interfaces get wrong
-- [`02-personas.md`](docs/02-personas.md) — the Incident Commander and the Robot Operator
-- [`03-user-flows.md`](docs/03-user-flows.md) — the three flows the deck is built around
-- [`04-information-architecture.md`](docs/04-information-architecture.md) — why the screen is laid out this way
-- [`05-design-system.md`](docs/05-design-system.md) — colour, type, the confidence encoding
-- [`06-accessibility-audit.md`](docs/06-accessibility-audit.md) — measured, including the failures
+- [`01-research.md`](docs/01-research.md) — domain grounding, and the four things real USAR interfaces get wrong
+- [`02-personas.md`](docs/02-personas.md) — the incident commander and the robot operator, and the tension between them
+- [`03-user-flows.md`](docs/03-user-flows.md) — the three flows, and why they are designed to collide
+- [`04-information-architecture.md`](docs/04-information-architecture.md) — why the screen is laid out this way, and what is deliberately absent
+- [`05-design-system.md`](docs/05-design-system.md) — colour, type, and the confidence encoding
+- [`06-accessibility-audit.md`](docs/06-accessibility-audit.md) — measured, including what fails
 
 ## Stack
 
-Vite · React 19 · TypeScript · Tailwind v4 · **plain SVG**.
-
-No map vendor, no WebGL, no Three.js — deliberately. A heavy basemap renders nothing at all if anything goes wrong on a judge's laptop, and hand-drawing the map is what makes the confidence encoding possible in the first place. Everything is deterministic from a fixed seed, so the incident is identical on every run.
+Vite · React 19 · TypeScript · Tailwind v4 · **plain SVG**. Everything is deterministic from a fixed seed, so the incident is identical on every run.
 
 ```bash
 npm install
