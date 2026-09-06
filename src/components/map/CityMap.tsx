@@ -22,6 +22,10 @@ const CELL = 26
 const W = GRID_W * CELL
 const H = GRID_H * CELL
 
+/** Leader-line offset for a survivor's rank badge, in SVG units. */
+const OFF_X = 17
+const OFF_Y = -17
+
 /** Base tone by what the ground IS, before we account for how sure we are. */
 function baseFill(kind: string, passable: boolean): string {
   if (kind === 'rubble' || !passable) return '#2e2420'
@@ -287,22 +291,38 @@ export function CityMap() {
                 className="cursor-pointer"
                 onClick={() => setSelectedSurvivor(sel ? null : s.id)}
               >
-                {sel && <circle r="19" fill="none" stroke="#f2ede6" strokeWidth="1.5" />}
-                <circle r="13" fill="#0d0b0a" stroke={isTop ? '#e0565c' : '#dc9a3f'} strokeWidth="2.6" />
-                {/* rank numeral: the ordering is legible without any colour at all */}
-                <text
-                  y="4.2"
-                  textAnchor="middle"
-                  fontSize="12.5"
-                  fontWeight="700"
-                  fill={isTop ? '#e0565c' : '#f2ede6'}
-                  className="font-mono"
-                >
-                  {n}
-                </text>
-                {s.status === 'assigned' && (
-                  <circle r="17" fill="none" stroke="#62ab82" strokeWidth="1.4" strokeDasharray="3 3" />
-                )}
+                {/* The casualty sits at the exact cell; the rank badge is offset
+                    on a leader line so it never collides with a unit glyph in an
+                    adjacent cell. Standard map-callout behaviour, and it keeps
+                    the position honest rather than nudging the marker. */}
+                <circle r="3" fill={isTop ? '#e0565c' : '#dc9a3f'} />
+                <line
+                  x1="2"
+                  y1="-2"
+                  x2={OFF_X - 8}
+                  y2={OFF_Y + 8}
+                  stroke={isTop ? '#e0565c' : '#dc9a3f'}
+                  strokeWidth="1.2"
+                  opacity="0.75"
+                />
+                <g transform={`translate(${OFF_X} ${OFF_Y})`}>
+                  {sel && <circle r="18" fill="none" stroke="#f2ede6" strokeWidth="1.5" />}
+                  {s.status === 'assigned' && (
+                    <circle r="16" fill="none" stroke="#62ab82" strokeWidth="1.4" strokeDasharray="3 3" />
+                  )}
+                  <circle r="12" fill="#0d0b0a" stroke={isTop ? '#e0565c' : '#dc9a3f'} strokeWidth="2.6" />
+                  {/* rank numeral: the ordering is legible with no colour at all */}
+                  <text
+                    y="4.2"
+                    textAnchor="middle"
+                    fontSize="12.5"
+                    fontWeight="700"
+                    fill={isTop ? '#e0565c' : '#f2ede6'}
+                    className="font-mono"
+                  >
+                    {n}
+                  </text>
+                </g>
               </g>
             )
           })}
