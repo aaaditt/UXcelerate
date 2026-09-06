@@ -60,7 +60,7 @@ function SeenSoFar() {
 function Point({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="border-t border-[#2b2620] pt-3.5">
-      <h3 className="text-[13.5px] font-semibold text-[#f4efe7]">{title}</h3>
+      <h2 className="text-[13.5px] font-semibold text-[#f4efe7]">{title}</h2>
       <p className="mt-1.5 text-[13px] leading-[1.7] text-[#9a8f80]">{children}</p>
     </div>
   )
