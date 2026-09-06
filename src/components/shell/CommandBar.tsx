@@ -9,9 +9,19 @@ function clock(minutes: number, offset: number) {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone?: string }) {
+function Stat({
+  label,
+  value,
+  tone,
+  className = '',
+}: {
+  label: string
+  value: string
+  tone?: string
+  className?: string
+}) {
   return (
-    <div className="flex flex-col gap-0.5 border-l border-[#2c2723] px-3 first:border-l-0">
+    <div className={`flex flex-col gap-0.5 border-l border-[#2c2723] px-3 first:border-l-0 ${className}`}>
       <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-[#857b6f]">{label}</span>
       <span className="tnum text-[13px] font-semibold" style={{ color: tone ?? '#f2ede6' }}>
         {value}
@@ -41,22 +51,24 @@ export function CommandBar({ onOpenProcess }: { onOpenProcess: () => void }) {
 
       <div className="flex flex-1 flex-wrap items-center">
         <Stat label="Since quake" value={clock(state.now, INCIDENT.sinceQuake)} />
-        <Stat label="Mission T+" value={`${state.now.toFixed(1)} min`} />
+        <Stat label="Mission T+" value={`${state.now.toFixed(1)} min`} className="hidden sm:flex" />
         <Stat
           label="Sector verified"
           value={`${cover.pct}%`}
           tone={cover.pct < 20 ? '#dc9a3f' : undefined}
         />
-        <Stat label="Located" value={`${entries.length}`} />
+        <Stat label="Located" value={`${entries.length}`} className="hidden md:flex" />
         <Stat
           label="Units dark"
           value={`${dark} / ${state.robots.length}`}
           tone={dark > 0 ? '#dc9a3f' : undefined}
+          className="hidden md:flex"
         />
         <Stat
           label="Orders unheard"
           value={`${queued}`}
           tone={queued > 0 ? '#dc9a3f' : undefined}
+          className="hidden lg:flex"
         />
         <Stat label="Contested" value={`${open}`} tone={open > 0 ? '#e0565c' : undefined} />
       </div>

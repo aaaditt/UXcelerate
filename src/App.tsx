@@ -49,23 +49,25 @@ function Deck() {
       <Shortcuts />
       <CommandBar onOpenProcess={() => setShowCase(true)} />
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[248px_minmax(0,1fr)_336px]">
+      <div className="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-[248px_minmax(0,1fr)_336px]">
         {/* left rail: who we have, and the key to what the map is saying */}
         <div className="hidden min-h-0 grid-rows-[minmax(0,auto)_minmax(0,1fr)] lg:grid">
           <FleetPanel />
           <MapAside />
         </div>
 
-        {/* the map is the hero: it gets the whole centre column */}
-        <div className="flex min-h-0 flex-col border-x border-[#2c2723]">
-          <div className="min-h-0 min-w-0 flex-1">
+        {/* the map is the hero: it gets the whole centre column.
+            On narrow screens a flex child would collapse to zero height, so the
+            map is given an explicit viewport-relative height there instead. */}
+        <div className="flex flex-col border-[#2c2723] lg:min-h-0 lg:border-x">
+          <div className="h-[58svh] min-w-0 lg:h-auto lg:min-h-0 lg:flex-1">
             <CityMap />
           </div>
           <Timeline />
         </div>
 
         {/* right rail */}
-        <div className="grid min-h-0 grid-rows-[minmax(0,1.15fr)_minmax(0,1fr)_minmax(0,0.85fr)]">
+        <div className="grid grid-rows-none lg:min-h-0 lg:grid-rows-[minmax(0,1.15fr)_minmax(0,1fr)_minmax(0,0.85fr)]">
           <TriagePanel />
           <ContestPanel />
           <LogFeed />
