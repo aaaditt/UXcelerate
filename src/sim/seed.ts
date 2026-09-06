@@ -1,7 +1,7 @@
 import type { Cell, CellKind, MissionState, Robot } from './types'
 
 export const GRID_W = 30
-export const GRID_H = 18
+export const GRID_H = 26
 
 /** Mulberry32 — small deterministic PRNG so the incident is identical every run. */
 function rng(seed: number) {
@@ -34,10 +34,12 @@ function buildGrid(): Cell[][] {
         kind = 'plaza'
       }
 
-      // Collapse fields: the north tower and the metro overbuild.
+      // Collapse fields: the north tower, the metro overbuild, and a southern
+      // terrace row nobody has reached yet.
       const nearTower = Math.hypot(x - 9, y - 4) < 3.1
       const nearMetro = Math.hypot(x - 20, y - 12) < 3.6
-      if ((nearTower || nearMetro) && rand() > 0.22) kind = 'rubble'
+      const nearTerrace = Math.hypot(x - 11, y - 21) < 4.2
+      if ((nearTower || nearMetro || nearTerrace) && rand() > 0.22) kind = 'rubble'
 
       row.push({
         x,
@@ -54,10 +56,13 @@ function buildGrid(): Cell[][] {
   }
 
   // Beyond the cordon we have nothing at all — not even a stale blueprint.
+  // The whole southern half of the sector is in this category, which is the
+  // point: six units cannot see a district, and the map should say so.
   for (let y = 0; y < GRID_H; y++) {
     for (let x = 0; x < GRID_W; x++) {
       if (x > 25 && y > 12) grid[y][x].conf = 'unknown'
-      if (y > 15 && x < 6) grid[y][x].conf = 'unknown'
+      if (y > 17 && (x < 7 || x > 19)) grid[y][x].conf = 'unknown'
+      if (y > 21) grid[y][x].conf = 'unknown'
     }
   }
 

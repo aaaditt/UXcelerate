@@ -24,10 +24,10 @@ const H = GRID_H * CELL
 
 /** Base tone by what the ground IS, before we account for how sure we are. */
 function baseFill(kind: string, passable: boolean): string {
-  if (kind === 'rubble' || !passable) return '#2a211d'
-  if (kind === 'street') return '#585045'
-  if (kind === 'plaza') return '#4c4439'
-  return '#332c26'
+  if (kind === 'rubble' || !passable) return '#2e2420'
+  if (kind === 'street') return '#6b6156'
+  if (kind === 'plaza') return '#5a5145'
+  return '#39312a'
 }
 
 /** How strongly the cell is drawn at all — certainty as presence. */
