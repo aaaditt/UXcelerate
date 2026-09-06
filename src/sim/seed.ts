@@ -99,13 +99,36 @@ function seedKnowledge(grid: Cell[][]) {
   }
 }
 
+/**
+ * Nudge a position onto the nearest cell a ground unit can actually stand on.
+ *
+ * Without this, a unit whose scripted coordinate lands inside a collapsed block
+ * is walled in: every route out is impassable, so it silently drops out of
+ * dispatch and every survivor reads "no route". Snapping keeps the fleet
+ * self-healing no matter what coordinates the incident script uses.
+ */
+export function snapToPassable(grid: Cell[][], x: number, y: number): { x: number; y: number } {
+  if (grid[y]?.[x]?.passable) return { x, y }
+  for (let r = 1; r <= 4; r++) {
+    for (let dy = -r; dy <= r; dy++) {
+      for (let dx = -r; dx <= r; dx++) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue
+        const nx = x + dx
+        const ny = y + dy
+        if (grid[ny]?.[nx]?.passable) return { x: nx, y: ny }
+      }
+    }
+  }
+  return { x, y }
+}
+
 export function seedState(): MissionState {
   const grid = buildGrid()
   seedKnowledge(grid)
   return {
     now: 0,
     grid,
-    robots: robots.map((r) => ({ ...r, orders: [] })),
+    robots: robots.map((r) => ({ ...r, ...snapToPassable(grid, r.x, r.y), orders: [] })),
     survivors: [],
     hazards: [],
     contests: [],

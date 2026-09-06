@@ -1,5 +1,5 @@
 import { decayed } from './decay'
-import { seedState } from './seed'
+import { seedState, snapToPassable } from './seed'
 import { EVENTS } from './script'
 import type { MissionEvent, MissionState, Order } from './types'
 
@@ -61,8 +61,10 @@ function applyEvent(s: MissionState, e: MissionEvent): MissionState {
     case 'move': {
       const r = s.robots.find((r) => r.id === e.robot)
       if (r) {
-        r.x = e.x
-        r.y = e.y
+        // Aerial units are not bound by ground passability; everyone else is.
+        const pos = r.cls === 'aerial' ? { x: e.x, y: e.y } : snapToPassable(s.grid, e.x, e.y)
+        r.x = pos.x
+        r.y = pos.y
         if (r.link === 'live' || r.link === 'degraded') r.lastContact = e.t
       }
       return s

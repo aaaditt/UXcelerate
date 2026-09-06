@@ -93,7 +93,10 @@ export function route(
       const isContested = contestedCells.has(`${nx},${ny}`)
       // An unresolved contest is treated as impassable unless we are asking the
       // counterfactual "what if it were clear?"
-      if (!cell.passable && !(isContested && opts.ignoreContested)) continue
+      // The destination is always enterable: you can reach the edge of a void
+      // even when the void itself is not traversable ground.
+      const isTarget = nx === to.x && ny === to.y
+      if (!cell.passable && !isTarget && !(isContested && opts.ignoreContested)) continue
       const w = 1 / CONF_WEIGHT[conf]
       const nk = key(nx, ny)
       if (dist[best] + w < dist[nk]) {
